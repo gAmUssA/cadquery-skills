@@ -1,0 +1,14 @@
+{
+  "name": "cadquery-skills",
+  "owner": {
+    "name": "Viktor Gamov",
+    "email": "viktor@gamov.io"
+  },
+  "plugins": [
+    {
+      "name": "cadquery-skills",
+      "source": "./",
+      "description": "Five skills for parametric CAD with CadQuery: planning/decomposition, code generation, assemblies, export, and design versioning"
+    }
+  ]
+}

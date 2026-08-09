@@ -1,0 +1,12 @@
+{
+  "name": "cadquery-skills",
+  "description": "Five skills for parametric CAD with CadQuery: planning/decomposition, code generation, assemblies, export, and design versioning",
+  "version": "1.0.0",
+  "author": {
+    "name": "Viktor Gamov",
+    "email": "viktor@gamov.io"
+  },
+  "homepage": "https://github.com/vikgamov/cadquery-skills",
+  "license": "MIT",
+  "keywords": ["cadquery", "cad", "3d-printing", "parametric", "stl", "step"]
+}
