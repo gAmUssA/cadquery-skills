@@ -17,7 +17,7 @@ Adapted for standalone use from the skills in
 **As a plugin** (recommended — updates with `git pull`):
 
 ```
-/plugin marketplace add vikgamov/cadquery-skills
+/plugin marketplace add gAmUssA/cadquery-skills
 /plugin install cadquery-skills@cadquery-skills
 ```
 
