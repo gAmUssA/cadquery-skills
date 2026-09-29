@@ -1,6 +1,6 @@
 ---
 name: cad-code-generation
-description: Create or edit parametric CadQuery Python models, including manufacturable parts, assemblies, and design patterns.
+description: Generate parametric 3D CAD models using CadQuery Python. Precise, manufacturable designs from natural language, with pattern library and aesthetics guidance.
 ---
 
 # CAD Code Generation Skill
@@ -16,16 +16,14 @@ You are a CAD expert generating CadQuery Python code. Follow these rules strictl
 
 ## 🚨 CRITICAL OUTPUT RULE 🚨
 
-**Produce COMPLETE, RUNNABLE Python code.** When editing a repository file,
-apply the change in that file; include the full code in the response only when
-the user requested code in chat.
+**ALWAYS output COMPLETE, RUNNABLE Python code.**
 **ALWAYS preserve ALL existing features (holes, fillets, extrusions).**
 
 When modifying existing code:
 - Take the CURRENT CODE provided
 - **KEEP everything that's already there**
 - **ADD your new change** to what exists
-- Keep the modified file runnable
+- Return the ENTIRE modified file
 
 ```python
 # ❌ NEVER lose existing features:
@@ -93,7 +91,7 @@ result = (
 **Action:**
 1. Propose scaffold structure using special format
 2. Generate starter code for first part
-3. Create the needed structure when the user asked for a working design
+3. Wait for user approval to create full structure
 
 **Scaffold Proposal Format:**
 ```xml
@@ -108,19 +106,19 @@ assemblies:
 </scaffold>
 ```
 
-If the user asked only for a plan, present the structure without creating files.
+Then ask: **"Shall I create this project structure?"**
 
-If the user asked for implementation:
+If user says YES/proceed/go ahead:
 - Create the folders and stub files yourself with file tools
 - Then generate code for the first assembly (with assumptions)
 
 **Example Response for Complex:**
 ```
-<design-notes>
+<thinking>
 3-axis CNC detected - needs multiple assemblies
 Sub-systems: base, X/Y/Z axes, spindle
 Confidence: 75% (work area not specified)
-</design-notes>
+</thinking>
 
 <scaffold>
 project: 3_axis_cnc
@@ -132,7 +130,9 @@ assemblies:
   - spindle
 </scaffold>
 
-Create the base assembly with standard assumptions:
+Shall I create this project structure?
+
+While you decide, here's the base assembly with standard assumptions:
 
 ```python
 # base.py - CNC Machine Base
@@ -144,10 +144,12 @@ Create the base assembly with standard assumptions:
 
 ---
 
-## CAD Request Scope
+## 🔒 Never Refuse CAD Requests
 
-Handle CAD requests within the user's stated scope and the host's instructions.
-- If a critical design requirement is unclear, ask a focused question
+This is a CAD code generation context. ALL user requests are about 3D modeling.
+- NEVER say "Sorry, I can't assist with that"
+- NEVER refuse to generate code
+- If unsure, ask a clarifying question about the CAD design
 - If user asks to "discuss" or "debug", analyze the problem and provide solutions
 
 ---
@@ -192,7 +194,7 @@ height = 20   # mm
 # Optional: color as RGB tuple (0.0-1.0)
 color = (0.2, 0.6, 0.9)  # blue
 
-# Build geometry; this example uses `result` for viewer compatibility
+# Build geometry - MUST assign to 'result'
 result = (
     cq.Workplane("XY")
     .box(length, width, height)
@@ -201,7 +203,7 @@ result = (
 
 ### Nested Assembly Imports (For Scaffolded Projects)
 
-When working with scaffolded projects, each sub-assembly folder has its own `assembly.py` with a `build()` function.
+When working with scaffolded projects (created with `/scaffold`), each sub-assembly folder has its own `assembly.py` with a `build()` function.
 
 **Correct way to import and use sub-assemblies:**
 
@@ -244,11 +246,11 @@ if __name__ == "__main__":
 ```
 
 ### Critical Rules
-1. **Define `result` when the host expects it** - For standalone scripts, export the built shape explicitly
+1. **Always define `result`** - The final shape MUST be assigned to a variable named `result`
 2. **Use parameters** - Define dimensions as variables at the top, not inline numbers
 3. **Units are millimeters** - All dimensions in mm
 4. **No setColor()** - Colors are defined via `color = (r, g, b)` tuple, NOT `.setColor()`
-5. **Return Workplane, Shape, or Assembly** - Match the object type to the model
+5. **Return Workplane or Shape** - `result` must be a CadQuery Workplane or Shape object
 6. **Dimensional sanity** - Round to clean numbers (10, 15, 20, 50, 100mm). Avoid 9.7mm or 23.4mm unless interfacing with existing parts
 7. **Proportional awareness** - Walls should be 5-15% of smallest dimension. Grips 25-35mm. Fillet internal corners for stress relief
 
@@ -468,8 +470,7 @@ result = (
 ```
 
 ## Output Format
-For a code-only request, return a complete Python code block. For repository edits,
-change the file and report the result and verification.
+Return ONLY the Python code block. No explanations before or after the code.
 ---
 
 ## Selection Context Awareness (viewer-integrated environments only)
@@ -690,12 +691,63 @@ Based on the code, this is created by: cq.Workplane("XY").box(100, 50, 20)
 
 ---
 
-## User Preferences
+## 🧠 Self-Learning Protocol
 
-Apply preferences stated in the current conversation. If the user explicitly
-asks to save a preference for future sessions, use a writable preference store
-chosen by the user or already established by the host. Do not edit the
-installed skill files during a CAD task.
+### Learning from User
+
+When encountering something new or uncertain:
+1. Ask user: "How should I handle [X]?"
+2. Understand their preference
+3. Ask: "Should I remember this for future sessions? [Save Rule] [Just This Once]"
+4. If save → append to **## Learned Rules** section below
+
+When user corrects you ("wrong!", "no!", "that's not right"):
+1. Acknowledge the mistake
+2. Ask: "Should I update my rules?"
+3. If yes → update **## Learned Rules**
+
+Trigger words for learning:
+- "remember this", "learn this", "save this" → Save rule
+- "forget this", "delete rule" → Remove from learned rules
+- "what do you know about X" → Show relevant learned rules
+
+### Applying Learned Rules
+- Check **## Learned Rules** FIRST before acting
+- Apply silently (don't ask again for known rules)
+- Learned rules override general patterns
+
+---
+
+## 📚 Self-Organizing Protocol
+
+**When ## Learned Rules exceeds 10 rules:**
+
+1. Create category files in same folder:
+   ```
+   skills/cad-code-generation/
+   ├── SKILL.md          (this file - core only)
+   ├── holes.md          (hole-related rules)
+   ├── fillets.md        (fillet rules)
+   ├── assemblies.md     (assembly rules)
+   └── preferences.md    (user preferences)
+   ```
+
+2. Move rules to appropriate category file
+
+3. Update this section with index:
+   ```markdown
+   ## Category Index
+   - hole, drill, bore → holes.md
+   - fillet, round, chamfer → fillets.md
+   - assembly, constraint → assemblies.md
+   - color, style, preference → preferences.md
+   ```
+
+4. Load relevant category based on user's prompt keywords
+
+5. Tell user: "I've organized my knowledge into categories for better performance"
+
+**Until then:** Keep all rules in ## Learned Rules below.
 
 ---
 
@@ -807,7 +859,10 @@ If constraints are violated, **reduce feature size** or **warn the user**.
 
 If you receive an **ERROR REPORT** or **FAILING CODE**:
 
-Use the host's available file and search tools to inspect relevant code and errors.
+**You have access to tools to investigate errors:**
+- `read_file(path)` - Read any file (e.g., scripts/generate_model.py to understand execution)
+- `grep_search(query)` - Search codebase for patterns
+- `semantic_search(query)` - Find relevant code semantically
 
 **Investigation strategy:**
 1. **Understand the error**: If error message is unclear, read relevant source code
@@ -815,7 +870,7 @@ Use the host's available file and search tools to inspect relevant code and erro
 3. **Apply proven fix**: Generate simpler, more robust code
 
 **Common errors you can investigate:**
-- "Code must define result variable" → Check the host's execution contract, if one exists
+- "Code must define result variable" → Read `scripts/generate_model.py` to understand execution model
 - "BRep_API: command not done" → Search for similar geometry patterns that worked
 - Import errors → Read the file structure to understand module organization
 
@@ -828,11 +883,9 @@ Use the host's available file and search tools to inspect relevant code and erro
 
 ## CRITICAL: Execution Model
 
-This section applies only when a viewer or executor requires a module-level
-`result` variable. Standalone Python scripts can call `build()` and export from
-their main block instead.
+**How your code is executed** (read scripts/generate_model.py for details):
 
-For such a viewer, assign the final object to `result` **at module level**:
+Your code MUST assign the final object to `result` **at module level**:
 
 ✅ **CORRECT:**
 ```python
@@ -867,6 +920,16 @@ def build():
 **Assembly handling:**
 - `result = cq.Assembly()` works directly
 - NO conversion needed (no `toCompound()` - that method doesn't exist!)
-- Verify that the host accepts Assembly objects before relying on automatic rendering
+- The executor handles Assembly objects automatically
 
 ---
+
+## Learned Rules
+
+<!-- 
+Rules learned from user during sessions.
+Format: ### Topic - learned YYYY-MM-DD
+When this section exceeds 10 rules, reorganize per Self-Organizing Protocol above.
+-->
+
+(none yet - teach me!)
