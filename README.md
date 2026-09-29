@@ -1,6 +1,6 @@
 # cadquery-skills
 
-Claude Code skills for parametric code-CAD with [CadQuery](https://cadquery.readthedocs.io/).
+Codex and Claude Code skills for parametric code-CAD with [CadQuery](https://cadquery.readthedocs.io/).
 Adapted for standalone use from the skills in
 [shdaifat/cadquery-cad-vscode](https://github.com/shdaifat/cadquery-cad-vscode) (MIT).
 
@@ -14,7 +14,31 @@ Adapted for standalone use from the skills in
 
 ## Install
 
-**As a plugin** (recommended — updates with `git pull`):
+### Codex
+
+The repository contains a portable `plugin.json` and five skills under `skills/`.
+Add this GitHub repository as a marketplace, then install the plugin:
+
+```bash
+codex plugin marketplace add gAmUssA/cadquery-skills
+codex plugin add cadquery-skills@cadquery-skills
+```
+
+For a project-local install without the plugin browser, copy the skill folders
+to the project's `.agents/skills/` directory:
+
+```bash
+mkdir -p your-project/.agents/skills
+cp -R skills/* your-project/.agents/skills/
+```
+
+Start a new Codex session in the project. Invoke a skill as `$cad-planner`,
+`$cad-code-generation`, and so on, or describe a CAD task for automatic skill
+selection.
+
+### Claude Code
+
+**As a plugin** (updates with `git pull`):
 
 ```
 /plugin marketplace add gAmUssA/cadquery-skills
@@ -28,8 +52,8 @@ project's `.claude/skills/`:
 cp -R skills/* your-project/.claude/skills/
 ```
 
-Then invoke with `/cad-planner`, `/cad-code-generation`, etc., or just describe
-a CAD task and let skill matching pick them up.
+Then invoke with `/cad-planner`, `/cad-code-generation`, etc., or describe a CAD
+task and let skill matching pick them up.
 
 ## Requirements
 
@@ -50,8 +74,7 @@ scaffolding commands. This adaptation makes them host-agnostic:
   host provides them)
 - `result`-variable auto-rendering → explicit `cq.exporters.export()` guidance
   for standalone scripts
-- Added YAML frontmatter (`name`/`description`) required by Claude Code skill
-  discovery
+- Added YAML frontmatter (`name`/`description`) for skill discovery
 
 ## License
 
