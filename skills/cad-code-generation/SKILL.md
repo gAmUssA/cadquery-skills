@@ -26,13 +26,20 @@ when no unit convention exists. Document assumptions that affect fit or
 manufacture. Ask a focused question only when a critical requirement cannot be
 reasonably inferred.
 
+For edits, retain existing geometry. For example, when adding a side hole to a
+plate that already has a top hole, keep the top hole in the resulting model.
+Before adding holes, fillets, shells, or counterbores, read
+[geometry-checks.md](references/geometry-checks.md) and check that the feature
+fits its parent geometry.
+
 For assemblies or substantial edits, read
 [project-workflow.md](references/project-workflow.md). For primitives, holes,
 standard parts, colors, selectors, and a motor mount example, read
-[cadquery-examples.md](references/cadquery-examples.md). For joining and mounting
-patterns, read [pattern-library.md](pattern-library.md). Read
-[aesthetics.md](aesthetics.md) when appearance matters. Use only the references
-relevant to the request.
+[cadquery-examples.md](references/cadquery-examples.md). Read
+[pattern-library.md](pattern-library.md) for mounts, snaps, clips, hinges,
+slides, and fasteners. Read [aesthetics.md](aesthetics.md) for style, surface
+treatment, and visual proportions. Use only the references relevant to the
+request.
 
 Proceed immediately to Step 3.
 

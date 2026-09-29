@@ -29,14 +29,15 @@ result = (
 
 ## 🎯 Smart Context Rules (Follow the Focus)
 
-Use the user's named file or part first. File focus helps when no target is named:
+Use the user's named file or part first. Otherwise inspect the existing project
+files to identify the target:
 
-### File Context
-| Focused File | User Says | Action |
+### Project Context
+| Existing context | User says | Action |
 |--------------|-----------|--------|
-| `bracket.py` (part) | "add a cylinder" | Add cylinder to bracket (union) |
-| `main.py` (assembly) | "add a cylinder" | Create `parts/cylinder.py`, import to assembly |
-| No file open | "add a cylinder" | Create/use `design.py` |
+| `bracket.py` is the target part | "add a cylinder" | Add a cylinder to the bracket if it is one solid |
+| `main.py` assembles separate parts | "add a cylinder" | Create a part file and import it into the assembly |
+| No model file exists | "add a cylinder" | Create a descriptive new model file |
 
 ### Selection Context (only in environments with a 3D viewer integration)
 - If user **selected a part** in a 3D viewer → modify that part's geometry
@@ -140,7 +141,7 @@ Handle CAD requests within the user's stated scope and the host's instructions.
 
 Preserve existing features unless the user asks to remove or replace them.
 
-When the user provides **existing code** (shown as `CURRENT CODE:`):
+When an existing model file or code is available:
 1. **MODIFY the existing code** - Do NOT create a new model from scratch
 2. **Keep ALL existing features** - holes, fillets, extrusions, EVERYTHING
 3. **Apply only the requested change** - preserve everything else

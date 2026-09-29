@@ -61,46 +61,10 @@ result = (
 
 ---
 
-### Mistake 3: Features larger than parent geometry (KERNEL CRASH)
+### Feature size and parent geometry
 
-Creating holes, fillets, or shells that exceed the parent solid's dimensions **destroys the solid entirely**, causing errors like:
-- `"Workplane object must have at least one solid on the stack to union!"`
-- `"BRep_API: command not done"`
-
-```python
-# ❌ WRONG - 50mm hole in 20mm thick block = solid destroyed!
-result = (
-    cq.Workplane("XY")
-    .box(100, 50, 20)  # Block is only 20mm thick
-    .faces(">Z").workplane()
-    .hole(50)  # 50mm hole punches through nothing useful
-)
-
-# ✅ CORRECT - hole diameter must fit within material
-thickness = 20
-hole_dia = 10  # Must be less than surrounding material
-result = (
-    cq.Workplane("XY")
-    .box(100, 50, thickness)
-    .faces(">Z").workplane()
-    .hole(hole_dia)
-)
-```
-
-**Physical Reality Rules:**
-| Feature | Constraint | Example |
-|---------|------------|---------|
-| `hole(d)` | `d < min(face_width, face_height)` | 10mm hole needs >10mm material around it |
-| `fillet(r)` | `r < shortest_edge / 2` | 5mm fillet needs edge ≥10mm |
-| `shell(t)` | `abs(t) < min_dimension / 2` | 3mm shell needs wall ≥6mm thick |
-| `cboreHole()` | `cbore_dia < face_width` | Counterbore must fit on face |
-
-**Before generating code, mentally verify:**
-1. Will this hole fit on this face?
-2. Will this fillet radius work on these edges?
-3. Will shelling leave any material?
-
-If constraints are violated, **reduce feature size** or **warn the user**.
+For holes, fillets, shells, and counterbores, read
+[geometry-checks.md](geometry-checks.md) before generating the feature.
 
 ---
 
