@@ -14,7 +14,7 @@ result = cq.Workplane("XY").cylinder(height, radius)
 result = cq.Workplane("XY").sphere(radius)
 
 # Cone
-result = cq.Workplane("XY").cone(radius1, radius2, height)
+result = cq.Workplane("XY").add(cq.Solid.makeCone(radius1, radius2, height))
 ```
 
 #### Modifications
@@ -175,8 +175,8 @@ color = (0.2, 0.2, 0.2)  # Dark gray
 "<X"  # Left face
 ">Y"  # Front face
 "<Y"  # Back face
-"|Z"  # Faces perpendicular to Z axis
-"#Z"  # Faces parallel to Z axis
+"|Z"  # Faces with normals parallel to Z (top and bottom of a box)
+"#Z"  # Faces with normals perpendicular to Z (sides of a box)
 ```
 
 ### Example: Motor Mount Bracket

@@ -192,13 +192,16 @@ When working with scaffolded projects, each sub-assembly folder has its own `ass
 
 ```python
 # ✅ CORRECT - Import the build function from a sub-assembly
+import cadquery as cq
 from gantry.assembly import build as build_gantry
 
 # Call build() and assign result to 'result'
 result = build_gantry()
 
-# If you need to position or modify it:
-result = build_gantry().translate((0, 0, 50))
+# If you need to position it in a parent assembly:
+parent = cq.Assembly(name="machine")
+parent.add(build_gantry(), name="gantry", loc=cq.Location(cq.Vector(0, 0, 50)))
+result = parent
 ```
 
 **What NOT to do:**

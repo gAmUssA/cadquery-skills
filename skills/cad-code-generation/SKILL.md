@@ -24,7 +24,8 @@ Preserve existing features unless the user asks to change or remove them. Keep
 dimensions as named parameters and use the project's units; use millimeters
 when no unit convention exists. Document assumptions that affect fit or
 manufacture. Ask a focused question only when a critical requirement cannot be
-reasonably inferred.
+reasonably inferred. If such a question is needed, wait for the answer before
+choosing or implementing the affected geometry.
 
 For edits, retain existing geometry. For example, when adding a side hole to a
 plate that already has a top hole, keep the top hole in the resulting model.
@@ -41,7 +42,7 @@ slides, and fasteners. Read [aesthetics.md](aesthetics.md) for style, surface
 treatment, and visual proportions. Use only the references relevant to the
 request.
 
-Proceed immediately to Step 3.
+Otherwise, proceed immediately to Step 3.
 
 ## Step 3 — Implement the Model
 
