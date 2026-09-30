@@ -4,6 +4,7 @@
 
 - Route CadQuery code generation through focused workflow, examples, viewer,
   and troubleshooting references for Codex and Claude Code.
+- Add a pencil holder smoke test for generated geometry and STL/STEP exports.
 
 ## 1.1.0 — 2026-09-29
 
