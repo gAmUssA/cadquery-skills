@@ -227,15 +227,16 @@ def build():
 
     return assy
 
-# For standalone preview
+# For headless export, run from the package's parent with:
+# python -m cnc_machine.assembly
 if __name__ == "__main__":
-    result = build()
+    cq.exporters.export(build().toCompound(), "cnc_machine.step")
 ```
 
 ### Critical Rules
 1. **Define `result` when the host expects it** - Standalone scripts can export the built shape explicitly
 2. **Use parameters** - Define dimensions as variables at the top, not inline numbers
-3. **Units are millimeters** - All dimensions in mm
+3. **Preserve project units** - Use the existing convention; use millimeters when none is defined
 4. **No setColor()** - Colors are defined via `color = (r, g, b)` tuple, NOT `.setColor()`
 5. **Return Workplane, Shape, or Assembly** - Match the object type to the model
 6. **Dimensional sanity** - Round to clean numbers (10, 15, 20, 50, 100mm). Avoid 9.7mm or 23.4mm unless interfacing with existing parts
