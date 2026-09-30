@@ -13,7 +13,7 @@ Part: 100×50×20mm
 Face: ">Z" (100×50mm)
 Face center: (0, 0, 10)
 Click point: (25, 10, 10)
-Click position: center (5mm from center)
+Click position: offset
 Current color: RGB(0.2, 0.6, 0.9)
 ```
 
@@ -36,7 +36,7 @@ to the selected face's local workplane.
 The "Click position" (center/offset/near-edge) is just informational. The **Click point** has the exact coordinates - USE THEM!
 
 ```python
-# Click point: (2, 0, 1) on face ">Z" of a 10×5×3mm box centered at origin
+# Click point: (2, 0, 1.5) on face ">Z" of a 10×5×3mm box centered at origin
 # Face ">Z" workplane: X=world X, Y=world Y
 # So use click point X and Y directly:
 
@@ -44,15 +44,18 @@ The "Click position" (center/offset/near-edge) is just informational. The **Clic
 ```
 
 ```python
-# Click point: (-3, 1, 1.5) on face ">Y" of a 10×5×3mm box
-# Face ">Y" workplane: X=world X, Y=world Z
-# So use click point X and Z:
+# Click point: (-3, 2.5, 0) on face ">Y" of a 10×5×3mm box
+# Face ">Y" workplane: X=-world X, Y=world Z
+# So negate world X and use world Z:
 
-.faces(">Y").workplane().center(-3, 1.5).hole(2)  # Hole at X=-3, Z=1.5 on front face
+.faces(">Y").workplane().center(3, 0).hole(2)  # Hole at world X=-3, Z=0
 ```
 
 ```python
-.faces(">Y").workplane(centerOption="CenterOfBoundBox").center(16, 10).hole(10)
+# For a transformed part or face, use the selected workplane itself:
+face_workplane = part.faces(">Y").workplane()
+local_point = face_workplane.plane.toLocalCoords(cq.Vector(*click_point))
+result = face_workplane.center(local_point.x, local_point.y).hole(hole_diameter)
 ```
 
 ### Click Point to Face Coordinates Mapping
@@ -66,19 +69,22 @@ The "Click position" (center/offset/near-edge) is just informational. The **Clic
 
 ### Face Local Workplane Coordinates
 
+For an axis-aligned box centered at the origin, CadQuery uses these directions.
+Use `face_workplane.plane.toLocalCoords()` for a rotated or translated face.
+
 | CadQuery Face | Workplane X axis | Workplane Y axis |
 |---------------|------------------|------------------|
 | `>Z` (top) | world X | world Y |
 | `<Z` (bottom) | world X | -world Y |
-| `>Y` (front) | world X | world Z |
-| `<Y` (back) | -world X | world Z |
-| `>X` (right) | -world Y | world Z |
-| `<X` (left) | world Y | world Z |
+| `>Y` (front) | -world X | world Z |
+| `<Y` (back) | world X | world Z |
+| `>X` (right) | world Y | world Z |
+| `<X` (left) | -world Y | world Z |
 
-**Example:** Click at (-3, 1, 3) on face ">Y" of a box
-- Face ">Y" workplane: X=world X, Y=world Z
-- Workplane position = (-3, 3)
-- Use: `.center(-3, 3).hole(2)`
+**Example:** Click at (-3, 2.5, 0) on face ">Y" of the 10×5×3mm box
+- Face ">Y" workplane: X=-world X, Y=world Z
+- Workplane position = (3, 0)
+- Use: `.center(3, 0).hole(2)`
 
 ---
 
