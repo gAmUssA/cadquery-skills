@@ -132,7 +132,7 @@ def build():
 
 **Assembly handling:**
 - `result = cq.Assembly()` works directly
-- NO conversion needed (no `toCompound()` - that method doesn't exist!)
-- Verify that the host accepts Assembly objects before relying on automatic rendering
+- Verify that the host accepts Assembly objects before relying on automatic rendering.
+- If a consumer requires a single `Shape`, use `result.toCompound()`.
 
 ---
