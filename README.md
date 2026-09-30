@@ -63,6 +63,12 @@ task and let skill matching pick them up.
 - No GUI required: the skills target headless scripts that export STL/STEP.
   `show_object()` guidance applies only inside cq-editor.
 
+## Smoke test
+
+The [pencil holder test](tests/pencil-holder/PROMPT.md) checks a model generated
+by either host for its open cavity, wall and base dimensions, and STL/STEP
+exports.
+
 ## Changes from the original
 
 The originals were written for a VS Code extension with a live 3D viewer and
