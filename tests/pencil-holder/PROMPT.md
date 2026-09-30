@@ -6,8 +6,9 @@ Run this prompt in a fresh Codex or Claude Code session with the installed
 > Create a parametric pencil holder: a round upright cup, 80 mm outside
 > diameter, 100 mm tall, 3 mm wall, 4 mm solid base, open at the top. Put its
 > base on Z=0, center it on the Z axis, define `build()` returning the CadQuery
-> solid, and export both STL and STEP in the main block. Return complete Python
-> code.
+> solid, and export both STL and STEP in the main block as `pencil_holder.stl`
+> and `pencil_holder.step` in the current working directory. Return complete
+> Python code.
 
 Save the generated code as `pencil_holder.py`, then run the checker from the
 repository root:

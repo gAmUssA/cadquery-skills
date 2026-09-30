@@ -124,7 +124,8 @@ result = (
 
 ### Click Point for Positioning
 
-If click point is provided, use it for positioning (optional):
+When the host supplies a click point for a requested feature, position the
+feature at that point after mapping it to the selected face's workplane:
 
 ```python
 # Selection: face ">Z", clicked at (25, 10, 10)

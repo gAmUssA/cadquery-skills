@@ -212,6 +212,7 @@ result = parent
 **From the main assembly.py:**
 ```python
 # ✅ CORRECT - import sub-assemblies and combine them
+import cadquery as cq
 from .base.assembly import build as build_base
 from .gantry.assembly import build as build_gantry
 from .z_axis.assembly import build as build_z_axis
